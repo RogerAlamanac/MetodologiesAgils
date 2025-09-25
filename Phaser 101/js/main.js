@@ -3,7 +3,7 @@ var config =
     type:Phaser.AUTO,
     width: 370,
     height: 550,
-    scene:[gameState],    //Array con las scenes/niveles
+    scene:[ mainMenu, gameState, gameStateLink],    //Array con las scenes/niveles
     render:
     {
         pixelArt:true
