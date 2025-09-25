@@ -83,6 +83,7 @@ class gameStateLink extends Phaser.Scene{
         this.cursores = this.input.keyboard.createCursorKeys();
 
         this.linkCurrentAnim = 'walkDown';
+
     }
 
     loadAnimations(){
@@ -130,32 +131,45 @@ class gameStateLink extends Phaser.Scene{
     update(){
 
         if(this.cursores.right.isDown){
-            this.link.x += config.HEROSPEED;
+            if(this.link.x <= config.width){
+                this.link.x += config.HEROSPEED;
+            }
             if(this.linkCurrentAnim !== 'walkRight') {
                 this.link.anims.play('walkRight', true);
                 this.linkCurrentAnim = 'walkRight';
             }
+
         }
         if(this.cursores.left.isDown){
-            this.link.x -= config.HEROSPEED;
+            if(this.link.x >= 0){
+                this.link.x -= config.HEROSPEED;
+            }
+            
             if(this.linkCurrentAnim !== 'walkLeft') {
                 this.link.anims.play('walkLeft', true);
                 this.linkCurrentAnim = 'walkLeft';
             }
+
         }
         if(this.cursores.up.isDown){
-            this.link.y -= config.HEROSPEED;
+            if(this.link.y >= 0){
+                this.link.y -= config.HEROSPEED;
+            }
             if(this.linkCurrentAnim !== 'walkUp') {
                 this.link.anims.play('walkUp', true);
                 this.linkCurrentAnim = 'walkUp';
             }
+
         }
         if(this.cursores.down.isDown){
-            this.link.y += config.HEROSPEED;
+            if(this.link.y <= config.height){
+                this.link.y += config.HEROSPEED;
+            }
             if(this.linkCurrentAnim !== 'walkDown') {
                 this.link.anims.play('walkDown', true);
                 this.linkCurrentAnim = 'walkDown';
             }
+
         }
         if(this.key_m.isDown){
             this.scene.start("mainMenu")
