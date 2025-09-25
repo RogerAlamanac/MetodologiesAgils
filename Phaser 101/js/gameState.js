@@ -11,12 +11,9 @@ class gameState extends Phaser.Scene{
         );
     }
     create(){//Pintamos los assets en pantalla
-        //this.add.image(0,0, 'bgeta');
-        //this.add.image(config.width/2, config.height/2, 'bgeta');
-        //this.add.sprite(config.width/2, config.height/2, 'bgeta');
         this.bg = this.add.tileSprite(0, 0, config.width, config.height, 'background')
         .setOrigin(0,0);   //se puede hacer setOrigin(0) en el caso de que las dos coordenadas sean iguales
-        //this.bird = this.add.image(config.width/2, config.height/2, 'bird').setScale(5).setFlipX(true);
+
         this.bird = this.add.sprite(config.width/2, config.height/2, 'bird').setScale(5)
 
         console.log(this.bird)
@@ -24,10 +21,6 @@ class gameState extends Phaser.Scene{
 
         this.bird.anims.play('fly');
 
-        /*this.key_right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-        this.key_left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-        this.key_up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-        this.key_down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);*/
         this.key_m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         this.cursores = this.input.keyboard.createCursorKeys();
     }
@@ -82,41 +75,87 @@ class gameStateLink extends Phaser.Scene{
         this.bg = this.add.tileSprite(0, 0, config.width, config.height, 'grass')
         .setOrigin(0,0); 
 
-        this.link = this.add.sprite(config.width/2, config.height/2, 'link')
-
-        this.loadAnimations();  //Funcion que creamos nosotros
-
-        this.link.anims.play('walk');
-
+        this.link = this.add.sprite(config.width/2, config.height/2, 'link').setScale(0.75);
+        
+        this.loadAnimations();  //Funcion que creamos nosotros 
+        this.link.anims.play('walkDown')
         this.key_m = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         this.cursores = this.input.keyboard.createCursorKeys();
+
+        this.linkCurrentAnim = 'walkDown';
     }
 
     loadAnimations(){
         this.anims.create(
             {
-                key:'walk',
+                key:'walkDown',
                 frames:this.anims.generateFrameNumbers('link', {start:0, end:9}),
                 frameRate:10,
                 repeat:-1,
                 yoyo:false
             }
         );
+
+        this.anims.create(
+            {
+                key:'walkLeft',
+                frames:this.anims.generateFrameNumbers('link', {start:10, end:19}),
+                frameRate:10,
+                repeat:-1,
+                yoyo:false
+            }
+        )
+
+        this.anims.create(
+            {
+                key:'walkUp',
+                frames:this.anims.generateFrameNumbers('link', {start:20, end:29}),
+                frameRate:10,
+                repeat:-1,
+                yoyo:false
+            }
+        )
+
+        this.anims.create(
+            {
+                key:'walkRight',
+                frames:this.anims.generateFrameNumbers('link', {start:30, end:39}),
+                frameRate:10,
+                repeat:-1,
+                yoyo:false
+            }
+        )
     }
 
     update(){
 
         if(this.cursores.right.isDown){
             this.link.x += config.HEROSPEED;
+            if(this.linkCurrentAnim !== 'walkRight') {
+                this.link.anims.play('walkRight', true);
+                this.linkCurrentAnim = 'walkRight';
+            }
         }
         if(this.cursores.left.isDown){
             this.link.x -= config.HEROSPEED;
+            if(this.linkCurrentAnim !== 'walkLeft') {
+                this.link.anims.play('walkLeft', true);
+                this.linkCurrentAnim = 'walkLeft';
+            }
         }
         if(this.cursores.up.isDown){
             this.link.y -= config.HEROSPEED;
+            if(this.linkCurrentAnim !== 'walkUp') {
+                this.link.anims.play('walkUp', true);
+                this.linkCurrentAnim = 'walkUp';
+            }
         }
         if(this.cursores.down.isDown){
             this.link.y += config.HEROSPEED;
+            if(this.linkCurrentAnim !== 'walkDown') {
+                this.link.anims.play('walkDown', true);
+                this.linkCurrentAnim = 'walkDown';
+            }
         }
         if(this.key_m.isDown){
             this.scene.start("mainMenu")
@@ -129,6 +168,7 @@ class mainMenu extends Phaser.Scene{
         super({key:"mainMenu"});
     }
     preload(){
+        this.cameras.main.setBackgroundColor("AAA")
         this.load.spritesheet('link', 'assets/sprites/link.png',
             {frameWidth:120, frameHeight:130}
         );

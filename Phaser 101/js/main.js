@@ -8,7 +8,7 @@ var config =
     {
         pixelArt:true
     },
-    HEROSPEED:5
+    HEROSPEED:3
 }
 
 var juego = new Phaser.Game(config)
