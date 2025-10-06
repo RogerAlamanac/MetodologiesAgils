@@ -1,6 +1,7 @@
 const gamePrefs = {
     NAVE_SPEED : 2,
-    BULLET_SPEED : -100
+    BULLET_SPEED : -100,
+    ENEMY_SPEED : 20
 }
 
 var config =

@@ -11,6 +11,7 @@ class gameState extends Phaser.Scene{
         this.load.image('bullet', 'spr_bullet_0.png')
         //this.load.image('spaceShip', 'spr_player_straight_0.png');
         this.load.spritesheet('nave', 'naveAnim.png', {frameWidth : 16, frameHeight : 24});
+        this.load.spritesheet('enemy', 'enemy-big.png', {frameWidth: 32, frameHeight : 32});
     }
     create(){//Pintamos los assets en pantalla
         this.bg1 = this.add.tileSprite(0,0,config.width, config.height, 'bg1').setOrigin(0);
@@ -21,7 +22,7 @@ class gameState extends Phaser.Scene{
 
         this.loadAnimations();  //Funcion que creamos nosotros
         this.loadPools();
-
+        this.startEnemyTimeline();
         this.cursores = this.input.keyboard.createCursorKeys();
 
         this.cursores.space.on
@@ -33,7 +34,13 @@ class gameState extends Phaser.Scene{
             },
             this */
         );
+         this.cursores.up.on
+         (
+            'down',
+            ()=>{this.spawnEnemy();}
+         );
 
+         
        
     }
 
@@ -64,10 +71,20 @@ class gameState extends Phaser.Scene{
                 repeat:-1
             }
         );
+
+        this.anims.create(
+            {
+                key:'enemyAnim',
+                frames: this.anims.generateFrameNumbers('enemy', {start: 0, end: 1}),
+                frameRate: 10,
+                repeat: -1
+            }
+        )
     }
 
     loadPools(){
         this.bulletPool = this.physics.add.group();
+        this.enemyPool = this.physics.add.group();
     }
 
     createBullet(){
@@ -85,10 +102,10 @@ class gameState extends Phaser.Scene{
             //Hay bullet en la pool
             console.log('Reciclo bala')
             //Activamos bullet
-            _bullet.SetActive(true);
+            _bullet.setActive(true);
             //Posicionamos en nave
-            _bullet.x = this.nave.x;
-            _bullet.y = this.nave.y;
+            _bullet.x = this.spaceShip.x;
+            _bullet.y = this.spaceShip.y;
         }
         //Le doy velocidad
         _bullet.body.setVelocityY(gamePrefs.BULLET_SPEED);
@@ -106,6 +123,43 @@ class gameState extends Phaser.Scene{
         //Condicion de destruccion/reutilizacion
     }
 
+    startEnemyTimeline() {
+        const delay = Phaser.Math.Between(1000, 3000);  // Entre 1 y 3 segundos
+        this.time.addEvent({
+            delay: delay,
+            callback: () => {
+                this.spawnEnemy();
+                this.startEnemyTimeline();  // Repetir función cuando acabe
+            }
+        });
+    }
+    spawnEnemy(){
+        //Miramos si hay un objeto dispoible en la pool
+        var _enemy = this.enemyPool.getFirst(false);
+
+        const randomX = Phaser.Math.Between(32, config.width - 32);
+
+        if(!_enemy){
+            //Creo un enemy
+            console.log('Enemigo Creado');
+            _enemy = new enemyPrefab(this, randomX, 0);
+            _enemy.setOrigin(.5, 1);
+            _enemy.setScale(0.75);
+            //Meto un enemy en la pool
+            this.enemyPool.add(_enemy);
+        } 
+        else{
+            //Hay enemy en la pool
+            console.log('Reciclo enemy')
+            //Activamos enemy
+            _enemy.setActive(true);
+            //Posicionamos arriba de la pantalla
+            _enemy.x = randomX;
+            _enemy.y = 0;
+        }
+        //Le doy velocidad
+        _enemy.body.setVelocity(0, gamePrefs.ENEMY_SPEED);
+    }
     update(){
         
         this.bg1.tilePositionY -= 1;
