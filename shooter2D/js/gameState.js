@@ -12,12 +12,13 @@ class gameState extends Phaser.Scene{
         //this.load.image('spaceShip', 'spr_player_straight_0.png');
         this.load.spritesheet('nave', 'naveAnim.png', {frameWidth : 16, frameHeight : 24});
         this.load.spritesheet('enemy', 'enemy-big.png', {frameWidth: 32, frameHeight : 32});
+        this.load.spritesheet('explosion', 'explosion.png', {frameWidth:16 , frameHeight:16 })
     }
     create(){//Pintamos los assets en pantalla
         this.bg1 = this.add.tileSprite(0,0,config.width, config.height, 'bg1').setOrigin(0);
         this.bg2 = this.add.tileSprite(0,0,config.width, config.height, 'bg2').setOrigin(0);
         this.spaceShip = this.physics.add.sprite(config.width/2, config.height*0.95, 'nave').setScale(1);
-
+        
         this.spaceShip.body.setCollideWorldBounds(true);
 
         this.loadAnimations();  //Funcion que creamos nosotros
@@ -38,10 +39,7 @@ class gameState extends Phaser.Scene{
          (
             'down',
             ()=>{this.spawnEnemy();}
-         );
-
-         
-       
+         );     
     }
 
     loadAnimations(){
@@ -80,11 +78,22 @@ class gameState extends Phaser.Scene{
                 repeat: -1
             }
         )
+        this.anims.create(
+            {
+                key:'explosionAnim',
+                frames: this.anims.generateFrameNumbers('explosion', {start: 0, end: 4}),
+                frameRate: 10,
+                repeat: 0,
+                showOnStart: true,
+                hideOnComplete:true
+            }
+        )
     }
 
     loadPools(){
         this.bulletPool = this.physics.add.group();
         this.enemyPool = this.physics.add.group();
+        this.explosionPool = this.add.group();
     }
 
     createBullet(){
@@ -123,28 +132,76 @@ class gameState extends Phaser.Scene{
         //Condicion de destruccion/reutilizacion
     }
 
+    createExplosion(_bullet){
+        var _explosion = this.explosionPool.getFirst(false);
+        if(!_explosion){
+            console.log('create explosion')
+            _explosion = new explosionPrefab(this,_bullet.x, _bullet.y);
+            //Meto una bala en la pool
+            this.explosionPool.add(_explosion);
+        } else{
+            console.log('reset explosion')
+            _explosion.active = true;
+            _explosion.x=_bullet.x;
+            _explosion.y = _bullet.y;
+            _explosion.anims.play('explosionAnim');
+        }
+
+    }
     startEnemyTimeline() {
         const delay = Phaser.Math.Between(1000, 3000);  // Entre 1 y 3 segundos
         this.time.addEvent({
             delay: delay,
-            callback: () => {
-                this.spawnEnemy();
-                this.startEnemyTimeline();  // Repetir función cuando acabe
-            }
+            callback: this.spawnEnemy,
+            callbackScope: this,
+            loop: true
         });
+
+        this.physics.add.overlap(
+            this.bulletPool,
+            this.enemyPool,
+            this.killEnemy,
+            null,
+            this
+        );
+    }
+
+    killEnemy(_bullet, _enemy){
+        console.log("Impact");
+
+        this.createExplosion(_bullet);
+        this.explosion = this.add.sprite(_enemy.x + 16, _enemy.y, 'explosion');
+
+        _bullet.setActive(false);
+        _bullet.body.reset(-100, -100);
+        _enemy.health--;
+        if(_enemy.health > 0){
+            //invulnerabilidad por X segundos
+        }
+        else{
+            //Actualizar score
+            //Calcular el % de drop
+            //Eliminar al enemigo
+            _enemy.setActive(false);
+            _enemy.body.reset(-200,-200);
+            _enemy.health = 2;
+            
+            //this.explosion.destroy();
+        }
+        
     }
     spawnEnemy(){
         //Miramos si hay un objeto dispoible en la pool
         var _enemy = this.enemyPool.getFirst(false);
 
-        const randomX = Phaser.Math.Between(32, config.width - 32);
+        var _randomX = Phaser.Math.Between(0, config.width - 32);
+        var _posY = 0;
 
         if(!_enemy){
             //Creo un enemy
             console.log('Enemigo Creado');
-            _enemy = new enemyPrefab(this, randomX, 0);
-            _enemy.setOrigin(.5, 1);
-            _enemy.setScale(0.75);
+            _enemy = new enemyPrefab(this, _randomX, _posY);
+
             //Meto un enemy en la pool
             this.enemyPool.add(_enemy);
         } 
@@ -154,11 +211,10 @@ class gameState extends Phaser.Scene{
             //Activamos enemy
             _enemy.setActive(true);
             //Posicionamos arriba de la pantalla
-            _enemy.x = randomX;
-            _enemy.y = 0;
+            _enemy.body.reset(_randomX, _posY);
         }
         //Le doy velocidad
-        _enemy.body.setVelocity(0, gamePrefs.ENEMY_SPEED);
+        _enemy.body.setVelocityY(gamePrefs.ENEMY_SPEED);
     }
     update(){
         
