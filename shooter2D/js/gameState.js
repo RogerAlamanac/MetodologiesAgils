@@ -13,6 +13,7 @@ class gameState extends Phaser.Scene{
         this.load.spritesheet('nave', 'naveAnim.png', {frameWidth : 16, frameHeight : 24});
         this.load.spritesheet('enemy', 'enemy-big.png', {frameWidth: 32, frameHeight : 32});
         this.load.spritesheet('explosion', 'explosion.png', {frameWidth:16 , frameHeight:16 })
+        this.load.image('enemyBullet', 'spr_enemy_bullet_0.png');
     }
     create(){//Pintamos los assets en pantalla
         this.bg1 = this.add.tileSprite(0,0,config.width, config.height, 'bg1').setOrigin(0);
@@ -24,6 +25,7 @@ class gameState extends Phaser.Scene{
         this.loadAnimations();  //Funcion que creamos nosotros
         this.loadPools();
         this.startEnemyTimeline();
+        this.shootEnemyBullet();
         this.cursores = this.input.keyboard.createCursorKeys();
 
         this.cursores.space.on
@@ -94,6 +96,7 @@ class gameState extends Phaser.Scene{
         this.bulletPool = this.physics.add.group();
         this.enemyPool = this.physics.add.group();
         this.explosionPool = this.add.group();
+        this.enemyBulletPool = this.physics.add.group();
     }
 
     createBullet(){
@@ -215,6 +218,31 @@ class gameState extends Phaser.Scene{
         }
         //Le doy velocidad
         _enemy.body.setVelocityY(gamePrefs.ENEMY_SPEED);
+    }
+
+    shootEnemyBullet(_enemy){
+         //Miramos si hay un objeto dispoible en la pool
+         var _enemyBullet = this.enemyBulletPool.getFirst(false);
+
+         if(!_enemyBullet){
+             //Creo una bullet
+             console.log('Bala Creada');
+             _enemyBullet = new bulletPrefab(this, this._enemy.x, this._enemy.body.y);
+             _enemyBullet.setOrigin(.5, 1);
+             //Meto una bala en la pool
+             this.bulletPool.add(_enemyBullet);
+         } else{
+             //Hay bullet en la pool
+             console.log('Reciclo bala')
+             //Activamos bullet
+             _enemyBullet.setActive(true);
+             //Posicionamos en nave
+             _enemyBullet.x = this.spaceShip.x;
+             _enemyBullet.y = this.spaceShip.y;
+         }
+         //Le doy velocidad
+         _enemyBullet.body.setVelocityY(gamePrefs.BULLET_SPEED);
+    
     }
     update(){
         
