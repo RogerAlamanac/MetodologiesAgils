@@ -167,13 +167,14 @@ class gameState extends Phaser.Scene{
             null,
             this
         );
+
+       
     }
 
     killEnemy(_bullet, _enemy){
         console.log("Impact");
 
         this.createExplosion(_bullet);
-        this.explosion = this.add.sprite(_enemy.x + 16, _enemy.y, 'explosion');
 
         _bullet.setActive(false);
         _bullet.body.reset(-100, -100);
@@ -190,8 +191,28 @@ class gameState extends Phaser.Scene{
             _enemy.health = 2;
             
             //this.explosion.destroy();
+        }  
+    }
+
+    killPlayer(_enemyBullet){
+        console.log("Player Impact");
+
+        this.createExplosion(_enemyBullet);
+
+        _enemyBullet.setActive(false);
+        _enemyBullet.body.reset(-100, -100);
+        //Restar vida
+        playerHealth--;
+        this.spaceShip.x = config.width/2;
+        this.spaceShip.y = config.height*0.95;
+        console.log(playerHealth);
+        //Comprobar si queda vida
+        if(playerHealth <= 0){
+            playerHealth = 4;
+            this.scene.start("gameState") 
         }
-        
+            //Si queda vida, invulnerabilidad por X segundos
+            //Si no queda vida, game over
     }
     spawnEnemy(){
         //Miramos si hay un objeto dispoible en la pool
@@ -219,29 +240,50 @@ class gameState extends Phaser.Scene{
         //Le doy velocidad
         _enemy.body.setVelocityY(gamePrefs.ENEMY_SPEED);
     }
+    shootEnemyBullet(){
+        this.time.addEvent({
+            delay: 2000,
+            callback: ()=>{
+                this.enemyPool.getChildren().forEach(
+                    enemy => {
+                        if(enemy.active){
+                            this.createEnemyBullet(enemy);
+                        }
+                    }
+                )
+            },
+            callbackScope: this,
+            loop: true         
+        });
 
-    shootEnemyBullet(_enemy){
+        this.physics.add.overlap(
+            this.enemyBulletPool,
+            this.spaceShip,
+            this.killPlayer,
+            null,
+            this
+        );
+    }
+    createEnemyBullet(_enemy){
          //Miramos si hay un objeto dispoible en la pool
          var _enemyBullet = this.enemyBulletPool.getFirst(false);
 
          if(!_enemyBullet){
              //Creo una bullet
              console.log('Bala Creada');
-             _enemyBullet = new bulletPrefab(this, this._enemy.x, this._enemy.body.y);
-             _enemyBullet.setOrigin(.5, 1);
+             _enemyBullet = new enemyBulletPrefab(this, _enemy.body.x + 16, _enemy.body.bottom);
              //Meto una bala en la pool
-             this.bulletPool.add(_enemyBullet);
+             this.enemyBulletPool.add(_enemyBullet);
          } else{
              //Hay bullet en la pool
              console.log('Reciclo bala')
              //Activamos bullet
              _enemyBullet.setActive(true);
-             //Posicionamos en nave
-             _enemyBullet.x = this.spaceShip.x;
-             _enemyBullet.y = this.spaceShip.y;
+             //Posicionamos en ene
+             _enemyBullet.body.reset(_enemy.body.x + 16, _enemy.body.bottom);
          }
          //Le doy velocidad
-         _enemyBullet.body.setVelocityY(gamePrefs.BULLET_SPEED);
+         _enemyBullet.body.setVelocityY(-gamePrefs.BULLET_SPEED);
     
     }
     update(){

@@ -34,3 +34,4 @@ var config =
 
 var juego = new Phaser.Game(config)
 var isDown = false;
+var playerHealth = 4;
