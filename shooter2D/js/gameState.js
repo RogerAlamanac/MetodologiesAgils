@@ -190,7 +190,6 @@ class gameState extends Phaser.Scene{
             _enemy.body.reset(-200,-200);
             _enemy.health = 2;
             
-            //this.explosion.destroy();
         }  
     }
 
@@ -201,16 +200,19 @@ class gameState extends Phaser.Scene{
 
         _enemyBullet.setActive(false);
         _enemyBullet.body.reset(-100, -100);
+        _enemyBullet.body.enable = false;
+      
         //Restar vida
         playerHealth--;
-        this.spaceShip.x = config.width/2;
-        this.spaceShip.y = config.height*0.95;
-        console.log(playerHealth);
+        // Evita desplazamiento no deseado
+        this.spaceShip.body.setVelocity(0, 0);
+
         //Comprobar si queda vida
         if(playerHealth <= 0){
             playerHealth = 4;
             this.scene.start("gameState") 
-        }
+        } 
+        console.log(this.spaceShip.body.velocity)
             //Si queda vida, invulnerabilidad por X segundos
             //Si no queda vida, game over
     }
@@ -283,7 +285,7 @@ class gameState extends Phaser.Scene{
              _enemyBullet.body.reset(_enemy.body.x + 16, _enemy.body.bottom);
          }
          //Le doy velocidad
-         _enemyBullet.body.setVelocityY(-gamePrefs.BULLET_SPEED);
+         _enemyBullet.body.setVelocityY(gamePrefs.ENEMYBULLET_SPEED);
     
     }
     update(){
