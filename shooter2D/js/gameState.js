@@ -14,20 +14,27 @@ class gameState extends Phaser.Scene{
         this.load.spritesheet('enemy', 'enemy-big.png', {frameWidth: 32, frameHeight : 32});
         this.load.spritesheet('explosion', 'explosion.png', {frameWidth:16 , frameHeight:16 })
         this.load.image('enemyBullet', 'spr_enemy_bullet_0.png');
+        this.load.spritesheet('armor', 'spr_armor.png', {frameWidth: 66,  frameHeight: 28});
     }
     create(){//Pintamos los assets en pantalla
         this.bg1 = this.add.tileSprite(0,0,config.width, config.height, 'bg1').setOrigin(0);
         this.bg2 = this.add.tileSprite(0,0,config.width, config.height, 'bg2').setOrigin(0);
         this.spaceShip = this.physics.add.sprite(config.width/2, config.height*0.95, 'nave').setScale(1);
-        
         this.spaceShip.body.setCollideWorldBounds(true);
+
+        this.armor = this.add.sprite(15, 10, 'armor', 4); // empieza con el primer frame
+        this.armor.setScrollFactor(0); 
+        this.armor.setDepth(10); 
+        this.armor.setScale(0.5);
 
         this.loadAnimations();  //Funcion que creamos nosotros
         this.loadPools();
         this.startEnemyTimeline();
         this.shootEnemyBullet();
+
         this.cursores = this.input.keyboard.createCursorKeys();
 
+        this.playerHealth = 4;
         this.cursores.space.on
         (
             'down',
@@ -193,28 +200,26 @@ class gameState extends Phaser.Scene{
         }  
     }
 
-    killPlayer(_enemyBullet){
-        console.log("Player Impact");
+    killPlayerBullet(_spaceShip, _enemyBullet) {
+    console.log("Player Impact");
 
-        this.createExplosion(_enemyBullet);
+    this.createExplosion(_enemyBullet);
 
-        _enemyBullet.setActive(false);
-        _enemyBullet.body.reset(-100, -100);
-        _enemyBullet.body.enable = false;
-      
-        //Restar vida
-        playerHealth--;
-        // Evita desplazamiento no deseado
-        this.spaceShip.body.setVelocity(0, 0);
+    _enemyBullet.setActive(false);
+    _enemyBullet.body.reset(-100,-100);
 
-        //Comprobar si queda vida
-        if(playerHealth <= 0){
-            playerHealth = 4;
-            this.scene.start("gameState") 
-        } 
-        console.log(this.spaceShip.body.velocity)
-            //Si queda vida, invulnerabilidad por X segundos
-            //Si no queda vida, game over
+    this.playerHealth--;
+
+    // Comprobar si queda vida
+    if (this.playerHealth < 0) {
+        this.scene.restart();
+    } else {
+        this.armor.setFrame(this.playerHealth);
+    }
+    }   
+
+    killPlayerEnemy(_spaceShip, _enemy) {
+          this.scene.restart();  
     }
     spawnEnemy(){
         //Miramos si hay un objeto dispoible en la pool
@@ -241,6 +246,14 @@ class gameState extends Phaser.Scene{
         }
         //Le doy velocidad
         _enemy.body.setVelocityY(gamePrefs.ENEMY_SPEED);
+
+         this.physics.add.overlap(
+            this.enemyPool,
+            this.spaceShip,
+            this.killPlayerEnemy,
+            null,
+            this
+        );
     }
     shootEnemyBullet(){
         this.time.addEvent({
@@ -261,7 +274,7 @@ class gameState extends Phaser.Scene{
         this.physics.add.overlap(
             this.enemyBulletPool,
             this.spaceShip,
-            this.killPlayer,
+            this.killPlayerBullet,
             null,
             this
         );
@@ -288,6 +301,7 @@ class gameState extends Phaser.Scene{
          _enemyBullet.body.setVelocityY(gamePrefs.ENEMYBULLET_SPEED);
     
     }
+    
     update(){
         
         this.bg1.tilePositionY -= 1;
