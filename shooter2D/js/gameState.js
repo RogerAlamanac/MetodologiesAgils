@@ -22,8 +22,7 @@ class gameState extends Phaser.Scene{
         this.spaceShip = this.physics.add.sprite(config.width/2, config.height*0.95, 'nave').setScale(1);
         this.spaceShip.body.setCollideWorldBounds(true);
 
-        this.armor = this.add.sprite(15, 10, 'armor', 4); // empieza con el primer frame
-        this.armor.setScrollFactor(0); 
+        this.armor = this.add.sprite(15, 10, 'armor', gamePrefs.MAX_PLAYER_HEALTH); // empieza con el primer frame
         this.armor.setDepth(10); 
         this.armor.setScale(0.5);
 
@@ -33,8 +32,6 @@ class gameState extends Phaser.Scene{
         this.shootEnemyBullet();
 
         this.cursores = this.input.keyboard.createCursorKeys();
-
-        this.playerHealth = 4;
         this.cursores.space.on
         (
             'down',
@@ -48,18 +45,14 @@ class gameState extends Phaser.Scene{
          (
             'down',
             ()=>{this.spawnEnemy();}
-         );     
+         );    
+         
+         
+
+        this.playerHealth = gamePrefs.MAX_PLAYER_HEALTH;
     }
 
     loadAnimations(){
-        this.anims.create(
-            {
-                key:'idle',
-                frames:this.anims.generateFrameNumbers('nave', {start:0, end:1}),
-                frameRate:10,
-                repeat:-1
-            }
-        );
 
         this.anims.create(
             {
@@ -201,25 +194,27 @@ class gameState extends Phaser.Scene{
     }
 
     killPlayerBullet(_spaceShip, _enemyBullet) {
-    console.log("Player Impact");
+        console.log("Player Impact");
 
-    this.createExplosion(_enemyBullet);
+        this.createExplosion(_enemyBullet);
 
-    _enemyBullet.setActive(false);
-    _enemyBullet.body.reset(-100,-100);
+        _enemyBullet.setActive(false);
+        _enemyBullet.body.reset(-100,-100);
 
-    this.playerHealth--;
+        this.playerHealth--;
 
-    // Comprobar si queda vida
-    if (this.playerHealth < 0) {
+        // Comprobar si queda vida
+        if (this.playerHealth < 0) {
         this.scene.restart();
-    } else {
+        this.playerHealth = gamePrefs.MAX_PLAYER_HEALTH;
+        } else {
         this.armor.setFrame(this.playerHealth);
-    }
+        }
     }   
 
     killPlayerEnemy(_spaceShip, _enemy) {
-          this.scene.restart();  
+          this.scene.restart(); 
+         this.playerHealth = gamePrefs.MAX_PLAYER_HEALTH; 
     }
     spawnEnemy(){
         //Miramos si hay un objeto dispoible en la pool

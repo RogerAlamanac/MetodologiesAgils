@@ -2,7 +2,9 @@ const gamePrefs = {
     NAVE_SPEED : 2,
     BULLET_SPEED : -100,
     ENEMY_SPEED : 20,
-    ENEMYBULLET_SPEED : 50
+    ENEMYBULLET_SPEED : 50,
+    PLAYER_HEALTH : 4,
+    MAX_PLAYER_HEALTH : 4
 }
 
 var config =
@@ -10,7 +12,7 @@ var config =
     type:Phaser.AUTO,
     width: 128,
     height: 256,
-    scene:[gameState],    //Array con las scenes/niveles
+    scene:[mainMenu, gameState],    //Array con las scenes/niveles
     render:
     {
         pixelArt:true
