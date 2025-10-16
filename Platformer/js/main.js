@@ -4,7 +4,9 @@ const gamePrefs=
     gameHeight: 540,
     level1Width:1280, //40*32
     level1Height: 800, //25*32
-    GRAVITY: 1000
+    GRAVITY: 980,
+    HERO_SPEED: 200,
+    HERO_JUMP: 450
 }
 
 var config = {
@@ -24,12 +26,6 @@ var config = {
             gravity:{y:gamePrefs.GRAVITY},
             debug:true
         }
-    }, 
-
-    scale:
-    {
-        mode:Phaser.Scale.FIT,
-        autoCenter:Phaser.Scale.CENTER_BOTH
     }
 }
 
