@@ -4,7 +4,9 @@ const gamePrefs = {
     ENEMY_SPEED : 20,
     ENEMYBULLET_SPEED : 50,
     PLAYER_HEALTH : 4,
-    MAX_PLAYER_HEALTH : 4
+    MAX_PLAYER_HEALTH : 4,
+    INITIAL_SCORE : 0,
+    SCORE_PER_ENEMY: 100
 }
 
 var config =
