@@ -6,7 +6,8 @@ const gamePrefs = {
     PLAYER_HEALTH : 4,
     MAX_PLAYER_HEALTH : 4,
     INITIAL_SCORE : 0,
-    SCORE_PER_ENEMY: 100
+    SCORE_PER_ENEMY: 100,
+    POWERUP_SPEED : 50
 }
 
 var config =

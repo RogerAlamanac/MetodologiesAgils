@@ -48,7 +48,8 @@ class gameState extends Phaser.Scene{
         this.loadPools();
         this.startEnemyTimeline();
         this.shootEnemyBullet();
-
+        this.pickPowerUp1();
+        this.pickPowerUp2();
 
         this.cursores = this.input.keyboard.createCursorKeys();
         this.cursores.space.on
@@ -126,6 +127,7 @@ class gameState extends Phaser.Scene{
         this.explosionPool = this.add.group();
         this.enemyBulletPool = this.physics.add.group();
         this.powerUp1Pool = this.physics.add.group();
+        this.powerUp2Pool = this.physics.add.group();
     }
 
     createBullet(){
@@ -220,12 +222,12 @@ class gameState extends Phaser.Scene{
             console.log(_randomPorcentageSpawn)
             console.log(_randomPorcentagePowerUp)
             //Calcular el % de drop
-            if(_randomPorcentageSpawn < 100){
+            if(_randomPorcentageSpawn < 20){
                 if(_randomPorcentagePowerUp < 50){
                     this.spawnPowerUp1(_enemy)
                 } 
                 else{
-                    this.spawnPowerUp1(_enemy)
+                    this.spawnPowerUp2(_enemy)
                 }
             }
             //Eliminar al enemigo
@@ -356,9 +358,68 @@ class gameState extends Phaser.Scene{
             //Activamos enemy
             _powerUp1.setActive(true);
         }
-        _powerUp1.body.setVelocityY(gamePrefs.ENEMY_SPEED);
+        _powerUp1.body.setVelocityY(gamePrefs.POWERUP_SPEED);
+        this.physics.add.overlap(
+            this.spaceShip,
+            this.powerUp1Pool,
+            this.pickPowerUp1,
+            null,
+            this
+        );
+        
     }
     
+    spawnPowerUp2(_enemy){
+        var _powerUp2 = this.powerUp2Pool.getFirst(false);
+        console.log("PowerUp1")
+        if(!_powerUp2){
+            //Creo un enemy
+            console.log('PowerUp1 Creado');
+            _powerUp2 = new powerUp2Prefab(this, _enemy.x, _enemy.y);
+
+            //Meto un enemy en la pool
+            this.powerUp2Pool.add(_powerUp2);
+        } 
+        else{
+            //Hay enemy en la pool
+            console.log('Reciclo PowerUp1')
+            //Activamos enemy
+            _powerUp2.setActive(true);
+        }
+        _powerUp2.body.setVelocityY(gamePrefs.POWERUP_SPEED);
+        this.physics.add.overlap(
+            this.spaceShip,
+            this.powerUp2Pool,
+            this.pickPowerUp2,
+            null,
+            this
+        );
+    }
+
+    pickPowerUp1(_spaceShip, _powerUp1){
+        
+            console.log("PowerUp1 picked");
+            _powerUp1.setActive(false);
+            _powerUp1.body.reset(-100, -100);
+
+            if(this.playerHealth < gamePrefs.MAX_PLAYER_HEALTH){
+                this.playerHealth++;
+                this.armor.setFrame(this.playerHealth);
+            }
+        
+    }
+
+    pickPowerUp2(_spaceShip, _powerUp2){
+        console.log("PowerUp2picked");
+        _powerUp2.setActive(false);
+        _powerUp2.body.reset(-100, -100);
+
+        if(this.playerHealth < gamePrefs.MAX_PLAYER_HEALTH){
+            this.playerHealth++;
+            this.armor.setFrame(this.playerHealth);
+        }
+}
+
     update(){
         
         this.bg1.tilePositionY -= 1;
