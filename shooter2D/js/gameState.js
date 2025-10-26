@@ -5,19 +5,26 @@ class gameState extends Phaser.Scene{
     }
     preload(){//Cargamos los assets en memoria
         this.cameras.main.setBackgroundColor("113");
+        //SPRITES
         this.load.setPath('assets/sprites');
         this.load.image('bg1', 'background_back.png');
         this.load.image('bg2', 'background_frontal.png');
         this.load.image('bullet', 'spr_bullet_0.png')
-        //this.load.image('spaceShip', 'spr_player_straight_0.png');
         this.load.spritesheet('nave', 'naveAnim.png', {frameWidth : 16, frameHeight : 24});
         this.load.spritesheet('enemy', 'enemy-big.png', {frameWidth: 32, frameHeight : 32});
         this.load.spritesheet('explosion', 'explosion.png', {frameWidth:16 , frameHeight:16 })
         this.load.image('enemyBullet', 'spr_enemy_bullet_0.png');
         this.load.spritesheet('armor', 'spr_armor.png', {frameWidth: 66,  frameHeight: 28});
         this.load.spritesheet('powerUp1', 'spr_power_up.png', {frameWidth: 16, frameHeight:16});
+        this.load.spritesheet('powerUp2', 'spr_power_up_2.png', {frameWidth: 16, frameHeight:16});
         this.load.image('score', 'spr_score_0.png');
-    }
+        //SOUNDS
+        this.load.setPath('assets/sounds');
+        this.load.audio('shootSound', 'snd_shoot.mp3');
+        this.load.audio('explosionSound', 'explosion.wav');
+        this.load.audio('powerUpSound', 'snd_powerup.wav');
+        this.load.audio('hitSound', 'snd_hit.wav');
+        }
     create(){//Pintamos los assets en pantalla
         this.bg1 = this.add.tileSprite(0,0,config.width, config.height, 'bg1').setOrigin(0);
         this.bg2 = this.add.tileSprite(0,0,config.width, config.height, 'bg2').setOrigin(0);
@@ -30,6 +37,11 @@ class gameState extends Phaser.Scene{
 
         this.score = this.add.sprite(config.width - 20, 10, 'score').setScale(0.5);
         this.score.setDepth(10);
+
+        this.shootSound = this.sound.add('shootSound');
+        this.explosionSound = this.sound.add('explosionSound'); 
+        this.powerUpSound = this.sound.add('powerUpSound');
+        this.hitSound = this.sound.add('hitSound');
 
         this.scoreValue = gamePrefs.INITIAL_SCORE;
         this.title = this.add.text(
@@ -48,8 +60,6 @@ class gameState extends Phaser.Scene{
         this.loadPools();
         this.startEnemyTimeline();
         this.shootEnemyBullet();
-        this.pickPowerUp1();
-        this.pickPowerUp2();
 
         this.cursores = this.input.keyboard.createCursorKeys();
         this.cursores.space.on
@@ -70,6 +80,11 @@ class gameState extends Phaser.Scene{
          
 
         this.playerHealth = gamePrefs.MAX_PLAYER_HEALTH;
+
+        this.autoFire = false;       
+        this.fireRate = 200;      
+        this.nextFire = 0;            
+
 
     }
 
@@ -119,6 +134,14 @@ class gameState extends Phaser.Scene{
                 repeat: -1
             }
         )
+        this.anims.create(
+            {
+                key:'powerUp2Anim',
+                frames: this.anims.generateFrameNumbers('powerUp2', {start: 0, end: 1}),
+                frameRate: 10,
+                repeat: -1
+            }
+        )
     }
 
     loadPools(){
@@ -153,7 +176,7 @@ class gameState extends Phaser.Scene{
         //Le doy velocidad
         _bullet.body.setVelocityY(gamePrefs.BULLET_SPEED);
         //Ejecutar el sonido
-
+        this.shootSound.play();
 
 
         //STUDENTS - FAIL
@@ -180,6 +203,7 @@ class gameState extends Phaser.Scene{
             _explosion.y = _bullet.y;
             _explosion.anims.play('explosionAnim');
         }
+        this.explosionSound.play();
 
     }
     startEnemyTimeline() {
@@ -222,7 +246,7 @@ class gameState extends Phaser.Scene{
             console.log(_randomPorcentageSpawn)
             console.log(_randomPorcentagePowerUp)
             //Calcular el % de drop
-            if(_randomPorcentageSpawn < 20){
+            if(_randomPorcentageSpawn < 100){
                 if(_randomPorcentagePowerUp < 50){
                     this.spawnPowerUp1(_enemy)
                 } 
@@ -250,15 +274,17 @@ class gameState extends Phaser.Scene{
 
         // Comprobar si queda vida
         if (this.playerHealth < 0) {
-        this.scene.restart();
+        this.scene.start('gameOver', { score: this.scoreValue });
         this.playerHealth = gamePrefs.MAX_PLAYER_HEALTH;
+        this.explosionSound.play();
         } else {
         this.armor.setFrame(this.playerHealth);
+        this.hitSound.play();
         }
     }   
 
     killPlayerEnemy(_spaceShip, _enemy) {
-          this.scene.restart(); 
+         this.scene.start('gameOver', { score: this.scoreValue });
          this.playerHealth = gamePrefs.MAX_PLAYER_HEALTH; 
     }
     spawnEnemy(){
@@ -397,16 +423,23 @@ class gameState extends Phaser.Scene{
     }
 
     pickPowerUp1(_spaceShip, _powerUp1){
-        
-            console.log("PowerUp1 picked");
-            _powerUp1.setActive(false);
-            _powerUp1.body.reset(-100, -100);
+        console.log("PowerUp1 picked");
+    _powerUp1.setActive(false);
+    _powerUp1.body.reset(-100, -100);
 
-            if(this.playerHealth < gamePrefs.MAX_PLAYER_HEALTH){
-                this.playerHealth++;
-                this.armor.setFrame(this.playerHealth);
-            }
-        
+    this.autoFire = true;
+
+    // Después de 10 segundos, desactivar el auto-fire
+    this.autoFireTimer = this.time.addEvent({
+        delay: 10000, // 10 segundos
+        callback: () => {
+            this.autoFire = false;
+            console.log("AutoFire desactivado");
+        },
+        callbackScope: this
+    });
+    this.powerUpSound.play();
+    console.log("AutoFire activado por 10 segundos");
     }
 
     pickPowerUp2(_spaceShip, _powerUp2){
@@ -415,9 +448,10 @@ class gameState extends Phaser.Scene{
         _powerUp2.body.reset(-100, -100);
 
         if(this.playerHealth < gamePrefs.MAX_PLAYER_HEALTH){
-            this.playerHealth++;
+            this.playerHealth = gamePrefs.MAX_PLAYER_HEALTH;
             this.armor.setFrame(this.playerHealth);
         }
+        this.powerUpSound.play();
 }
 
     update(){
@@ -436,6 +470,12 @@ class gameState extends Phaser.Scene{
         else{
             this.spaceShip.anims.play('idle', true);
         }
+
+        if(this.autoFire && this.time.now > this.nextFire){
+            this.createBullet();            
+            this.nextFire = this.time.now + this.fireRate;
+        }
+
 
     }
 }

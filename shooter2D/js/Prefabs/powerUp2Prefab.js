@@ -1,9 +1,9 @@
 class powerUp2Prefab extends Phaser.GameObjects.Sprite{
-    constructor(_scene, _posX, _posY, _spriteTag='powerUp1'){
+    constructor(_scene, _posX, _posY, _spriteTag='powerUp2'){
         super(_scene, _posX, _posY, _spriteTag);
         _scene.add.existing(this);
         _scene.physics.add.existing(this);
-        this.anims.play('powerUp1Anim');
+        this.anims.play('powerUp2Anim');
     }
 
     preUpdate(){
