@@ -1,27 +1,39 @@
 class slimePrefab extends enemyClassPrefab{
-    constructor(_scene, _posX, _posY, _spriteTag='slime'){
+    constructor(_scene, _posX = 656, _posY = 272, _spriteTag = 'slime') {
         super(_scene, _posX, _posY, _spriteTag);
-        this.slime = this;
-        this.slime.anims.play('slimeMove');
-        this.slime.direction = 1;
-        this.slime.body.setVelocityX(gamePrefs.ENEMY_SPEED * this.slime.direction, 0);
-        this.setColliders();
+        
+        _scene.add.existing(this);
+
+        this.anims.play('slimeMove', true);
+        this.flipX = this.direction < 0; 
+        
     }
-    
-    setColliders(){
+
+    setColliders() {
         this.scene.physics.add.collider(
-            this.slime, 
+            this,
             this.scene.walls
-            )
+        );
     }
-    preUpdate(time, delta){
-        if(this.slime.body.blocked.left || this.slime.body.blocked.right){
-            {
-                this.slime.direction *= -1;
-                this.slime.flipX = !this.slime.flipX;
-                this.slime.body.setVelocityX(gamePrefs.ENEMY_SPEED * this.slime.direction);
+
+    preUpdate(time, delta) {
+        if (this.body.blocked.left) {
+            this.changeDirection();
+        } else if (this.direction === 1) { 
+
+            const sensorOffset = this.body.halfWidth * this.direction; 
+            const sensorX = this.x + sensorOffset;
+        
+            const sensorY = this.y + this.body.halfHeight + 2; 
+
+
+            const tile = this.scene.walls.getTileAtWorldXY(sensorX, sensorY);
+
+    
+            if (!tile) { 
+                this.changeDirection(); 
             }
+            super.preUpdate(time, delta); 
         }
-        super.preUpdate(time,delta);
     }
 }

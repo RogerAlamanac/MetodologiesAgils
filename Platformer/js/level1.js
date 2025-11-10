@@ -10,6 +10,7 @@ class level1 extends Phaser.Scene{
         this.load.spritesheet('hero', 'hero.png', {frameWidth: 32, frameHeight:32}); 
         this.load.image('doorEntry', 'spr_door_closed_0.png');
         this.load.spritesheet('jumper', 'jumper.png', {frameWidth:32, frameHeight:32})
+        this.load.spritesheet('slime', 'slime.png', {frameWidth:32, frameHeight:32})
 
         this.load.setPath('assets/tilesets');
         this.load.image('tileset_walls', 'tileset_walls.png');
@@ -45,10 +46,8 @@ class level1 extends Phaser.Scene{
         this.doorEntry.body.setAllowGravity(false);
         this.doorEntry.body.setImmovable(true);*/
 
-        this.hero = this.physics.add.sprite(65, 100, 'hero');
-        //this.jumper = this,physics.add.sprite(240, 304, 'jumper');
-       this.physics.add.collider(this.hero, this.walls);
-
+       this.hero = new heroPrefab(this, 65, 100);
+        
        this.cursors = this.input.keyboard.createCursorKeys();
        this.loadAnimations();
         
@@ -60,9 +59,7 @@ class level1 extends Phaser.Scene{
         this.cameras.main.setBounds(0,0, gamePrefs.level1Width, this.map.level1Height);
 
         this.jumper = new jumperPrefab(this, 240, 304);
-
-       /* this.loadPools();
-        this.spawnJumper()*/
+        this.slime = new slimePrefab(this, 656, 272);
 
     }
     loadAnimations(){
@@ -79,6 +76,15 @@ class level1 extends Phaser.Scene{
             {
                 key:'jumperMove',
                 frames:this.anims.generateFrameNumbers('jumper', {start:0, end:3}),
+                frameRate:5,
+                repeat:-1
+            }
+        );
+
+        this.anims.create(
+            {
+                key:'slimeMove',
+                frames:this.anims.generateFrameNumbers('slime', {start:0, end:3}),
                 frameRate:5,
                 repeat:-1
             }
@@ -102,29 +108,6 @@ class level1 extends Phaser.Scene{
         }
     }
     update(){
-        if(this.cursors.left.isDown){
-            this.hero.body.setVelocityX(-gamePrefs.HERO_SPEED);
-            this.hero.setFlipX(true);
-            this.hero.anims.play('move', true);
-        } 
-        else if(this.cursors.right.isDown){ //MOVER DERECHA
-            this.hero.body.setVelocityX(gamePrefs.HERO_SPEED);
-            this.hero.setFlipX(false);
-            this.hero.anims.play('move', true);
-        } else{
-            this.hero.body.setVelocityX(0);
-            this.hero.anims.stop().setFrame(0);
-        } 
-
-        if(this.cursors.space.isDown && this.hero.body.onFloor() 
-            // && this.hero.body.blocked.down
-            && Phaser.Input.Keyboard.DownDuration(this.cursors.space, 250)
-        ){        
-            this.hero.body.setVelocityY(gamePrefs.HERO_JUMP);        
-        }
-
-        if(!this.hero.body.onFloor()){
-            this.hero.anims.stop().setFrame(6);
-        }
+       
     }
 }

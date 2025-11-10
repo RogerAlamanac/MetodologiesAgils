@@ -1,30 +1,24 @@
-class jumperPrefab extends Phaser.GameObjects.Sprite{
-    constructor(_scene, _posX, _posY, _spriteTag='jumper'){
+class jumperPrefab extends enemyClassPrefab{
+   constructor(_scene, _posX, _posY, _spriteTag = 'jumper') {
         super(_scene, _posX, _posY, _spriteTag);
+        
         _scene.add.existing(this);
-        _scene.physics.world.enable(this);
-        this.scene = _scene;
-        this.jumper = this;
-        this.jumper.anims.play('jumperMove');
-        this.jumper.direction = 1;
-        this.jumper.body.setVelocityX(gamePrefs.ENEMY_SPEED * this.jumper.direction, 0);
-        this.setColliders();
+
+        this.anims.play('jumperMove', true);
+        this.flipX = this.direction < 0; 
     }
-    
-    setColliders(){
+
+    setColliders() {
         this.scene.physics.add.collider(
-            this.jumper, 
-            this.scene.walls
-            )
+            this,
+            this.scene.walls 
+        );
     }
-    preUpdate(time, delta){
-        if(this.jumper.body.blocked.left || this.jumper.body.blocked.right){
-            {
-                this.jumper.direction *= -1;
-                this.jumper.flipX = !this.jumper.flipX;
-                this.jumper.body.setVelocityX(gamePrefs.ENEMY_SPEED * this.jumper.direction);
-            }
+
+    preUpdate(time, delta) {
+        if (this.body.blocked.left || this.body.blocked.right) {
+            this.changeDirection();
         }
-        super.preUpdate(time,delta);
+        super.preUpdate(time, delta); 
     }
 }
