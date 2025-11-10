@@ -4,9 +4,7 @@ class slimePrefab extends enemyClassPrefab{
         
         _scene.add.existing(this);
 
-        this.anims.play('slimeMove', true);
-        this.flipX = this.direction < 0; 
-        
+        this.anims.play('slimeMove', true);   
     }
 
     setColliders() {
@@ -23,13 +21,10 @@ class slimePrefab extends enemyClassPrefab{
 
             const sensorOffset = this.body.halfWidth * this.direction; 
             const sensorX = this.x + sensorOffset;
-        
             const sensorY = this.y + this.body.halfHeight + 2; 
-
 
             const tile = this.scene.walls.getTileAtWorldXY(sensorX, sensorY);
 
-    
             if (!tile) { 
                 this.changeDirection(); 
             }
