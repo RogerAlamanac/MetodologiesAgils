@@ -1,4 +1,6 @@
-class heroPrefab extends Phaser.GameObjects.Sprite{
+import { HERO } from '../core/constants.js';
+
+export class Hero extends Phaser.Physics.Arcade.Sprite{
      constructor(_scene, _posX, _posY, _spriteTag='hero'){
         super(_scene, _posX, _posY, _spriteTag);
         _scene.add.existing(this);
@@ -7,7 +9,7 @@ class heroPrefab extends Phaser.GameObjects.Sprite{
         this.hero = this;
         this.hero.anims.play('move');
         this.hero.direction = 1;
-        this.hero.body.setVelocityX(gamePrefs.HERO_SPEED * this.hero.direction, 0);
+        this.hero.body.setVelocityX(HERO.SPEED * this.hero.direction, 0);
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.setColliders();
     }
@@ -36,7 +38,7 @@ class heroPrefab extends Phaser.GameObjects.Sprite{
         if(this.cursors.space.isDown && this.hero.body.onFloor() 
             && Phaser.Input.Keyboard.DownDuration(this.cursors.space, 250)
         ){        
-            this.hero.body.setVelocityY(HERO.JUMP);        
+            this.hero.body.setVelocityY(HERO.JUMP_FORCE);        
         }
 
         if(!this.hero.body.onFloor()){

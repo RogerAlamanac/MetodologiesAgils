@@ -1,13 +1,10 @@
-import {Enemy} from './enemyClassPrefab.js';
-
-
-class slimePrefab extends enemyClassPrefab{
+import {Enemy} from './Enemy.js';
+import { Level1 } from '../../scenes/level1.js';    
+export class Slime extends Enemy{
     constructor(_scene, _posX = 656, _posY = 272, _spriteTag = 'slime') {
         super(_scene, _posX, _posY, _spriteTag);
         
-        _scene.add.existing(this);
-
-        this.anims.play('slimeMove', true);   
+        _scene.add.existing(this); 
     }
 
     setColliders() {

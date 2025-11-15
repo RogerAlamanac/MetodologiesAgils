@@ -1,6 +1,6 @@
-import { ENEMY } from "../../core/constants.js";
+import {Enemy} from './Enemy.js';
 
-class Jumper extends enemyClassPrefab{
+export class Jumper extends Enemy{
    constructor(_scene, _posX, _posY, _texture = 'jumper') {
         super(_scene, _posX, _posY, _texture);
         
