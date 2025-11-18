@@ -10,11 +10,31 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
         _scene.physics.world.enable(this);
 
         this.body.setVelocityX(ENEMY.SPEED * this.direction);
-        this.anims.play(_spriteTag + 'move',true);
+        this.health = 1;
         this.setColliders();
     }
 
-    setColliders() {}
+    setColliders() {
+        if(this.scene.walls){
+            this.scene.physics.add.collider(
+                this,
+                this.scene.walls
+            )
+        }
+        if(this.scene.hero){
+            this.scene.physics.add.collider(
+                this,
+                this.scene.hero,
+                this.scene.hero.hitHero,
+                null,
+                this.scene.hero
+            )
+        }
+    }
+    
+    setHealth(_value){
+        this.health = _value;
+    }
 
     preUpdate(time, delta) {
         super.preUpdate(time, delta);

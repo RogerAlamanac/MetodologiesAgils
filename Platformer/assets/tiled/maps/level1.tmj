@@ -71,78 +71,6 @@
                  "width":0,
                  "x":306.089229696758,
                  "y":309.440571627745
-                }, 
-                {
-                 "height":0,
-                 "id":2,
-                 "name":"Jumper02",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"health",
-                         "type":"int",
-                         "value":2
-                        }],
-                 "rotation":0,
-                 "type":"Jumper",
-                 "visible":true,
-                 "width":0,
-                 "x":274.810038340885,
-                 "y":751.817706517951
-                }, 
-                {
-                 "height":0,
-                 "id":3,
-                 "name":"Jumper03",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"health",
-                         "type":"int",
-                         "value":2
-                        }],
-                 "rotation":0,
-                 "type":"Jumper",
-                 "visible":true,
-                 "width":0,
-                 "x":1107.05995120251,
-                 "y":751.817706517951
-                }, 
-                {
-                 "height":0,
-                 "id":5,
-                 "name":"Slime01",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"health",
-                         "type":"int",
-                         "value":2
-                        }],
-                 "rotation":0,
-                 "type":"Slime",
-                 "visible":true,
-                 "width":0,
-                 "x":884.754269780411,
-                 "y":278.161380271872
-                }, 
-                {
-                 "height":0,
-                 "id":6,
-                 "name":"Slime02",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"health",
-                         "type":"int",
-                         "value":2
-                        }],
-                 "rotation":0,
-                 "type":"Slime",
-                 "visible":true,
-                 "width":0,
-                 "x":790.916695712792,
-                 "y":757.403276402928
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -333,7 +261,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":7,
+ "nextobjectid":2,
  "orientation":"orthogonal",
  "renderorder":"left-up",
  "tiledversion":"1.10.1",

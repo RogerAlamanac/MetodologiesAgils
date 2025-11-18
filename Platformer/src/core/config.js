@@ -34,7 +34,6 @@ export function buildConfig({ scenes = [] } = {})
     scale: {
       mode: Phaser.Scale[SCALE.MODE],
       autoCenter: Phaser.Scale[SCALE.AUTO_CENTER],
-      zoom: SCALE.ZOOM,
     },
   };
 }    

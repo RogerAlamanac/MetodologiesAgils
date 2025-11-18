@@ -1,14 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="left-up" width="40" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="left-up" width="40" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="7">
+ <editorsettings>
+  <export target="level1.json" format="json"/>
+ </editorsettings>
  <tileset firstgid="1" name="tileset_walls" tilewidth="32" tileheight="32" tilecount="12" columns="4">
   <image source="../tilesets/tileset_walls.png" width="128" height="96"/>
  </tileset>
  <tileset firstgid="13" name="tileset_moss" tilewidth="32" tileheight="32" tilecount="32" columns="8">
   <image source="../tilesets/tileset_moss.png" width="256" height="128"/>
  </tileset>
+ <tileset firstgid="45" name="tileset_enemies" tilewidth="32" tileheight="32" tilecount="6" columns="6">
+  <image source="../tilesets/tileset_entities.png" width="192" height="32"/>
+ </tileset>
  <imagelayer id="2" name="level1_reference" visible="0" locked="1" opacity="0.7">
-  <image source="references/level_1.jpg" width="1286" height="808"/>
+  <image source="references/level_1.jpg"/>
  </imagelayer>
+ <layer id="7" name="level1_reference_entities" width="40" height="25">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,50,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,50,50,50,0,0,50,0,0,0,50,0,0,0,0,0,0,0,0,50,0,0,0,0,0,50,0,50,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,45,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,50,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,46,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,50,0,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,50,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,50,0,0,0,0,0,50,0,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,45,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46,0,0,0,0,0,0,0,50,0,45,0,0,50,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="8" name="level1_entities">
+  <object id="1" name="Jumper01" type="Jumper" x="306.089" y="309.441">
+   <properties>
+    <property name="health" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="2" name="Jumper02" type="Jumper" x="274.81" y="751.818">
+   <properties>
+    <property name="health" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="3" name="Jumper03" type="Jumper" x="1107.06" y="751.818">
+   <properties>
+    <property name="health" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="5" name="Slime01" type="Slime" x="884.754" y="278.161">
+   <properties>
+    <property name="health" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="6" name="Slime02" type="Slime" x="790.917" y="757.403">
+   <properties>
+    <property name="health" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
  <layer id="1" name="layer_walls" width="40" height="25" offsetx="1.33333" offsety="1.33333">
   <data encoding="csv">
 4,9,11,2,3,4,4,2,5,1,8,4,10,4,10,5,7,6,10,4,7,7,2,11,10,1,6,11,4,5,5,1,8,4,7,1,6,10,5,3,

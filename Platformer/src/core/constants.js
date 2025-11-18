@@ -47,5 +47,5 @@ export const SCALE =
 {
     MODE: 'FIT',                // Phaser.Scale.FIT
     AUTO_CENTER: 'CENTER_BOTH', // Phaser.Scale.CENTER_BOTH
-    ZOOM: 2                     //Para pixelart: escala lógica x2 sin deformar
+    ZOOM: 1                  //Para pixelart: escala lógica x2 sin deformar
 }

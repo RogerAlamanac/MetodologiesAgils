@@ -1,4 +1,4 @@
-import { LEVEL_SIZE, HERO } from "../core/constants.js";
+import { LEVEL_SIZE, HERO, SCALE } from "../core/constants.js";
 import { Jumper } from '../entities/enemies/Jumper.js';
 import { Slime } from '../entities/enemies/Slime.js';
 import { Hero } from '../entities/heroPrefab.js';
@@ -75,21 +75,37 @@ export class Level1 extends Phaser.Scene
         //this.entry.body.setAllowGravity(false);
         //this.entry.body.setImmovable(true);
         
-        this.hero = new Hero(this,100,280);        
+        this.hero = new Hero(this,100,280);  
+        
+        //Leer e instanciar todas las entidades del nivel
+        this.entities=this.map.getObjectLayer('level1_entities');
+        console.log(this.entities);
+        this.entities.objects.forEach(entity => {
+            //console.log(entity.name + ' - ' + entity.x + ',' + entity.y);
+            switch(entity.type){
+                case 'Jumper':
+                    let _jumper = new Jumper(this,entity.x,entity.y, entity.type.toLowerCase());
+                    _jumper.setHealth(entity.properties[0].value);
+                    break;
+                    
 
-        //this.physics.add.collider(this.hero,this.entry);
-        this.physics.add.collider(this.hero,this.walls);
-        this.cursors = this.input.keyboard.createCursorKeys();
+                case 'Slime':
+                    let _slime = new Slime(this,entity.x,entity.y, entity.type.toLowerCase());
+                    _slime.setHealth(entity.properties[0].value);
+                    break;
+                    default: console.log('Entidad no reconocida: '+entity.type);
+            }
+        }, this);
 
-        this.jumper = new Jumper(this,240,304);
-        this.slime = new Slime(this,656,272);
+        //this.jumper = new Jumper(this,240,304);
+        //this.slime = new Slime(this,656,272);
 
         //this.cameras.main.startFollow(this.hero);
         //this.cameras.main.setBounds(0,0,gamePrefs.level1Width,gamePrefs.level1Height);
         //this.cameras.main.startFollow(this.hero).setBounds(0,0,
         //gamePrefs.level1Width,gamePrefs.level1Height);
         this.cameras.main.startFollow(this.hero).setBounds(0,0,
-            LEVEL_SIZE.LEVEL1_WIDTH,LEVEL_SIZE.LEVEL1_HEIGHT);
+            LEVEL_SIZE.LEVEL1_WIDTH,LEVEL_SIZE.LEVEL1_HEIGHT).setZoom(SCALE.ZOOM);
     }
 
     loadAnimations()
@@ -124,36 +140,7 @@ export class Level1 extends Phaser.Scene
 
     update()
     {
-        if(this.cursors.left.isDown)
-        { //ME MUEVO A LA IZQUIERDA
-            this.hero.body.setVelocityX(-HERO.SPEED); // ← negativo a la izquierda    
-            this.hero.setFlipX(true); 
-            this.hero.anims.play('run',true);   
-        }else
-        if(this.cursors.right.isDown)
-        { //ME MUEVO A LA DERECHA
-            this.hero.body.setVelocityX(HERO.SPEED); 
-            this.hero.setFlipX(false);      
-            this.hero.anims.play('run',true);
-        }else
-        {
-            this.hero.body.setVelocityX(0);  
-            this.hero.anims.stop().setFrame(0); 
-        }
-        
-        if(this.cursors.space.isDown
-           && this.hero.body.onFloor()
-           //&& this.hero.body.blocked.down  
-           && Phaser.Input.Keyboard.DownDuration(this.cursors.space,250))
-           
-        {
-            this.hero.body.setVelocityY(HERO.JUMP_FORCE);    
-        } 
-
-        if(!this.hero.body.onFloor())
-        {
-            this.hero.anims.stop().setFrame(6);
-        }
+       
         
     }
 } 

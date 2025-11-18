@@ -5,44 +5,65 @@ export class Hero extends Phaser.Physics.Arcade.Sprite{
         super(_scene, _posX, _posY, _spriteTag);
         _scene.add.existing(this);
         _scene.physics.world.enable(this);
+
         this.scene = _scene;
-        this.hero = this;
-        this.hero.anims.play('move');
-        this.hero.direction = 1;
-        this.hero.body.setVelocityX(HERO.SPEED * this.hero.direction, 0);
+
+        this.anims.play('run');
+        this.direction = 1;
+        this.body.setVelocityX(HERO.SPEED * this.direction, 0);
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.setColliders();
     }
     
     setColliders(){
         this.scene.physics.add.collider(
-            this.hero, 
+            this, 
             this.scene.walls
             )
-    }   
+    }  
+
+    hitHero(_enemy, _hero){
+        if(this.body.touching.down && _enemy.body.touching.up){
+            if(--_enemy.health <= 0){
+                _enemy.destroy();
+            }
+            this.body.setVelocityY(HERO.JUMP_FORCE);
+
+        } else{
+            if(--this.health<0){
+
+            } 
+            else{
+                this.body.reset(65, 100);
+                this.scene.cameras.main.shake(500, 0.05)
+                this.scene.cameras.main.flash(500, 255, 0, 0);
+            }
+        }
+    }
+ 
     preUpdate(time, delta){
          if(this.cursors.left.isDown){
-            this.hero.body.setVelocityX(-HERO.SPEED);
-            this.hero.setFlipX(true);
-            this.hero.anims.play('move', true);
+            this.body.setVelocityX(-HERO.SPEED);
+            this.setFlipX(true);
+            this.anims.play('run', true);
         } 
         else if(this.cursors.right.isDown){ //MOVER DERECHA
-            this.hero.body.setVelocityX(HERO.SPEED);
-            this.hero.setFlipX(false);
-            this.hero.anims.play('move', true);
+            this.body.setVelocityX(HERO.SPEED);
+            this.setFlipX(false);
+            this.anims.play('run', true);
         } else{
-            this.hero.body.setVelocityX(0);
-            this.hero.anims.stop().setFrame(0);
+            this.body.setVelocityX(0);
+            this.anims.stop().setFrame(0);
         } 
 
-        if(this.cursors.space.isDown && this.hero.body.onFloor() 
+        if(this.cursors.space.isDown && this.body.onFloor() 
             && Phaser.Input.Keyboard.DownDuration(this.cursors.space, 250)
         ){        
-            this.hero.body.setVelocityY(HERO.JUMP_FORCE);        
+            this.body.setVelocityY(HERO.JUMP_FORCE);        
         }
 
-        if(!this.hero.body.onFloor()){
-            this.hero.anims.stop().setFrame(6);
+        if(!this.body.onFloor()){
+            this.anims.stop().setFrame(6);
         }
         super.preUpdate(time,delta);
     }

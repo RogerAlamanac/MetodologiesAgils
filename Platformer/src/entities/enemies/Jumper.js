@@ -6,18 +6,10 @@ export class Jumper extends Enemy{
         
         _scene.add.existing(this);
 
-        this.anims.play(_texture + 'Move', true);
+        this.anims.play('run_'+_texture, true);
         this.flipX = this.direction < 0; 
     }
 
-    setColliders() {
-        if(this.scene.walls){
-            this.scene.physics.add.collider(
-                this,
-                this.scene.walls 
-            );
-        }
-    }
 
     preUpdate(time, delta) {
         super.preUpdate(time, delta); 
