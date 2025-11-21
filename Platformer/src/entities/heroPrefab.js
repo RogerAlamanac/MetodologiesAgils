@@ -13,6 +13,7 @@ export class Hero extends Phaser.Physics.Arcade.Sprite{
         this.body.setVelocityX(HERO.SPEED * this.direction, 0);
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.setColliders();
+        this.score = 0;
     }
     
     setColliders(){
@@ -39,6 +40,11 @@ export class Hero extends Phaser.Physics.Arcade.Sprite{
                 this.scene.cameras.main.flash(500, 255, 0, 0);
             }
         }
+    }
+
+    pickGem(_gem, _hero){
+        _gem.destroy()
+        
     }
  
     preUpdate(time, delta){

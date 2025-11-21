@@ -1,8 +1,8 @@
-import { LEVEL_SIZE, HERO, SCALE } from "../core/constants.js";
+import { LEVEL_SIZE, SCALE } from "../core/constants.js";
 import { Jumper } from '../entities/enemies/Jumper.js';
 import { Slime } from '../entities/enemies/Slime.js';
 import { Hero } from '../entities/heroPrefab.js';
-
+import {Gem} from '../entities/Gem.js';
 export class Level1 extends Phaser.Scene
 {
     constructor()
@@ -25,6 +25,8 @@ export class Level1 extends Phaser.Scene
         this.load.spritesheet('jumper','jumper.png',
         {frameWidth:32,frameHeight:32});
         this.load.spritesheet('slime','slime.png',
+        {frameWidth:32,frameHeight:32});
+        this.load.spritesheet('gem', 'gem.png',
         {frameWidth:32,frameHeight:32});
 
         this.load.setPath('assets/tiled/tilesets');   
@@ -93,7 +95,12 @@ export class Level1 extends Phaser.Scene
                     let _slime = new Slime(this,entity.x,entity.y, entity.type.toLowerCase());
                     _slime.setHealth(entity.properties[0].value);
                     break;
+
+                case 'Gem': let _gem = new Gem(this,entity.x,entity.y, entity.type.toLowerCase());
+                    _gem.setValue(entity.properties[0].value)
+                    break;
                     default: console.log('Entidad no reconocida: '+entity.type);
+
             }
         }, this);
 
@@ -136,6 +143,16 @@ export class Level1 extends Phaser.Scene
             frameRate: 10,
             repeat: -1
         });
+
+        this.anims.create(
+            {
+                key: 'gem',
+                frames:this.anims.generateFrameNumbers('gem', 
+                {start:0, end: 4}),
+                frameRate: 10,
+                repeat: -1
+            }
+        )
     }
 
     update()
