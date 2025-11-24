@@ -27,7 +27,7 @@ export const HERO =
 {
     SPEED: 200,
     JUMP_FORCE: -450,
-    MAX_LIVES: 7
+    MAX_LIVES: 6
 };
 
 export const ENEMY = 

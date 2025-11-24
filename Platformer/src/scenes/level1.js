@@ -1,8 +1,10 @@
-import { LEVEL_SIZE, SCALE } from "../core/constants.js";
+import { HERO, LEVEL_SIZE, SCALE } from "../core/constants.js";
 import { Jumper } from '../entities/enemies/Jumper.js';
 import { Slime } from '../entities/enemies/Slime.js';
 import { Hero } from '../entities/heroPrefab.js';
 import {Gem} from '../entities/Gem.js';
+import { Door } from "../entities/Door.js";
+
 export class Level1 extends Phaser.Scene
 {
     constructor()
@@ -17,7 +19,7 @@ export class Level1 extends Phaser.Scene
         this.load.image('bg','bg_green_tile.png');
 
         this.load.setPath('assets/sprites/static');
-        this.load.image('entry','spr_door_closed_0.png');
+        this.load.image('door','spr_door_closed_0.png');
 
         this.load.setPath('assets/sprites/spritesheets');
         this.load.spritesheet('hero','hero.png',
@@ -28,6 +30,8 @@ export class Level1 extends Phaser.Scene
         {frameWidth:32,frameHeight:32});
         this.load.spritesheet('gem', 'gem.png',
         {frameWidth:32,frameHeight:32});
+        this.load.spritesheet('health','health.png',
+        {frameWidth:128,frameHeight:28});
 
         this.load.setPath('assets/tiled/tilesets');   
         this.load.image('tileset_walls','tileset_walls.png');
@@ -64,6 +68,21 @@ export class Level1 extends Phaser.Scene
         this.map.createLayer('layer_moss_right',ts_moss);
         this.map.createLayer('layer_moss_down',ts_moss);
 
+        this.health = this.add.sprite(80, 30, 'health', HERO.MAX_LIVES)//.setFrame(HERO.MAX_LIVES - 1);
+        this.health.setScrollFactor(0);
+
+        this.scoreValue = 0;
+        this.title = this.add.text(
+            LEVEL_SIZE.LEVEL1_WIDTH -20, 
+            10,
+            this.scoreValue,
+            {
+                fontFamily: 'Arial Black',
+                fill : '#000000',
+                stroke: '#FFFFFF',
+                strokeThickness: 4
+            }
+        ).setOrigin(.5).setDepth(10).setScale(0.5);
         //Defino con qué se colisiona en la layer_walls
         //this.map.setCollisionBetween(1,11,true,true,'layer_walls');
         //Ponemos -1, ya que phaser lo interpreta como un 0 en el json
@@ -72,7 +91,7 @@ export class Level1 extends Phaser.Scene
 
         this.loadAnimations();
 
-        this.entry = this.add.sprite(65,268,'entry');
+        //this.entry = this.add.sprite(65,268,'entry');
         //this.entry = this.physics.add.sprite(65,268,'entry');
         //this.entry.body.setAllowGravity(false);
         //this.entry.body.setImmovable(true);
@@ -85,6 +104,10 @@ export class Level1 extends Phaser.Scene
         this.entities.objects.forEach(entity => {
             //console.log(entity.name + ' - ' + entity.x + ',' + entity.y);
             switch(entity.type){
+                case 'Hero':
+                    let _hero = new Hero(this,entity.x,entity.y, entity.type.toLowerCase());
+                    _hero.setScore(entity.properties[0].value);
+                    break;
                 case 'Jumper':
                     let _jumper = new Jumper(this,entity.x,entity.y, entity.type.toLowerCase());
                     _jumper.setHealth(entity.properties[0].value);
@@ -98,8 +121,12 @@ export class Level1 extends Phaser.Scene
 
                 case 'Gem': let _gem = new Gem(this,entity.x,entity.y, entity.type.toLowerCase());
                     _gem.setValue(entity.properties[0].value)
+                    console.log('Gem value: '+entity.properties[0].value);
                     break;
-                    default: console.log('Entidad no reconocida: '+entity.type);
+                case 'Door': let _door = new Door(this, entity.x, entity.y,  entity.type.toLowerCase());
+                    _door.setOpened(entity.properties[0].value);
+                    break;
+                default: console.log('Entidad no reconocida: '+entity.type);
 
             }
         }, this);

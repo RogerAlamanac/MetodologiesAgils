@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="left-up" width="40" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="32">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="left-up" width="40" height="25" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="36">
  <editorsettings>
   <export target="level1.json" format="json"/>
  </editorsettings>
@@ -11,6 +11,9 @@
  </tileset>
  <tileset firstgid="45" name="tileset_enemies" tilewidth="32" tileheight="32" tilecount="6" columns="6">
   <image source="../tilesets/tileset_entities.png" width="192" height="32"/>
+ </tileset>
+ <tileset firstgid="51" name="Hero" tilewidth="32" tileheight="32" tilecount="8" columns="8">
+  <image source="../../sprites/spritesheets/hero.png" width="256" height="32"/>
  </tileset>
  <imagelayer id="2" name="level1_reference" visible="0" locked="1" opacity="0.7">
   <image source="references/level_1.jpg"/>
@@ -25,7 +28,7 @@
 0,0,0,0,0,0,0,0,0,0,50,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,50,50,50,0,0,50,0,0,0,50,0,0,0,0,0,0,0,0,50,0,0,0,0,0,50,0,50,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,48,51,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,45,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -39,7 +42,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,50,0,0,0,0,0,50,0,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,50,0,0,0,0,0,50,0,0,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,49,0,
 0,0,0,0,0,0,0,0,45,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,46,0,0,0,0,0,0,0,50,0,45,0,0,50,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
@@ -204,6 +207,25 @@
   <object id="31" name="Slime03" type="Slime" x="210.667" y="501.333">
    <properties>
     <property name="health" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="32" name="Door_Closed" type="Door" x="113.752" y="269.311">
+   <properties>
+    <property name="isOpen" type="bool" value="false"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="33" name="Door_Open" type="Door" x="1235.72" y="718.488">
+   <properties>
+    <property name="isOpen" type="bool" value="false"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="34" name="Hero" type="Hero" x="143.892" y="269.311">
+   <properties>
+    <property name="health" type="int" value="7"/>
+    <property name="score" type="int" value="0"/>
    </properties>
    <point/>
   </object>

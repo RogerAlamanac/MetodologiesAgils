@@ -14,6 +14,7 @@ export class Hero extends Phaser.Physics.Arcade.Sprite{
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.setColliders();
         this.score = 0;
+        this.health = HERO.MAX_LIVES;
     }
     
     setColliders(){
@@ -31,13 +32,17 @@ export class Hero extends Phaser.Physics.Arcade.Sprite{
             this.body.setVelocityY(HERO.JUMP_FORCE);
 
         } else{
-            if(--this.health<0){
+            if(this.health<0){
 
             } 
             else{
                 this.body.reset(65, 100);
                 this.scene.cameras.main.shake(500, 0.05)
                 this.scene.cameras.main.flash(500, 255, 0, 0);
+                this.health--;
+                this.scene.health.setFrame(this.health);
+
+                this.score += 10;
             }
         }
     }
@@ -45,6 +50,16 @@ export class Hero extends Phaser.Physics.Arcade.Sprite{
     pickGem(_gem, _hero){
         _gem.destroy()
         
+    }
+
+    checkDoorOverlap(_door, _hero){
+        if(_door.isOpen){
+            //Overlap logic
+        }
+    }
+
+    setScore(_value){
+        this.score = _value;
     }
  
     preUpdate(time, delta){

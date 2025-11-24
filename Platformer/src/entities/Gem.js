@@ -21,11 +21,15 @@ export class Gem extends Phaser.Physics.Arcade.Sprite{
         )
     }
 
+    applyColorByValue(){
+        if (this.value === 5){
+            this.setTint(0x00ff00); // COLOR VERDE
+        }
+    }
+
     preUpdate(time, delta){
         super.preUpdate(time, delta)
-        if (this.value == 5){
-           
-        }
+        this.applyColorByValue();
     }
 }
    
