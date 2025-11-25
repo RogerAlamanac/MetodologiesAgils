@@ -7,7 +7,7 @@ export class Hero extends Phaser.Physics.Arcade.Sprite{
         _scene.physics.world.enable(this);
 
         this.scene = _scene;
-
+        this.setOrigin(.5, 1);
         this.anims.play('run');
         this.direction = 1;
         this.body.setVelocityX(HERO.SPEED * this.direction, 0);

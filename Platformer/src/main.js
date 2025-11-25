@@ -6,7 +6,7 @@ import { buildConfig } from './core/config.js';
 //Importamos las escenas
 import {Level1} from './scenes/level1.js';
 //import { Level2 } from './scenes/Level2.js';
-//import { Hud } from './scenes/Hud.js';
+import { HUD } from './UI/HUD.js';
 
 const game = new Phaser.Game
 (
@@ -14,8 +14,9 @@ const game = new Phaser.Game
     // Orden en el que se registran/arrancan
     scenes: [
       // Boot,    // si hay una escena de precarga
-      Level1
+      Level1,
       // Hud     // si se lanza luego en paralelo (ya lo veremos)
+      HUD
     ],
   })
 );
