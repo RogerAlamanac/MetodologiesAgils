@@ -1,5 +1,5 @@
 import { HERO } from '../core/constants.js';
-
+import { EVENTS } from '../core/events.js';
 export class Hero extends Phaser.Physics.Arcade.Sprite{
      constructor(_scene, _posX, _posY, _spriteTag='hero'){
         super(_scene, _posX, _posY, _spriteTag);
@@ -33,24 +33,32 @@ export class Hero extends Phaser.Physics.Arcade.Sprite{
 
         } else{
             if(this.health<0){
-
+                this.scene.game.events.emit(EVENTS.HERO_DIED);
+                this.body.reset(65, 100);
+                this.health = HERO.MAX_LIVES;
+                this.score = 0;
             } 
             else{
+                this.scene.game.events.emit(EVENTS.HERO_DAMAGED);
                 this.body.reset(65, 100);
                 this.scene.cameras.main.shake(500, 0.05)
                 this.scene.cameras.main.flash(500, 255, 0, 0);
-                this.health--;
-                this.scene.health.setFrame(this.health);
+                
+
 
                 this.score += 10;
             }
         }
     }
 
-    pickGem(_gem, _hero){
-        _gem.destroy()
+    /*pickGem(_gem, _hero){
+        //Actualizar UI de puntos
+        this.scene.game.events.emit(EVENTS.GEM_COLLECTED, this.value ?? 1);
+        //Destruir gem
+        _gem.disableBody(true, true);
+        _gem.destroy();    
         
-    }
+    }*/
 
     checkDoorOverlap(_door, _hero){
         if(_door.isOpen){

@@ -103,7 +103,7 @@ export class Level1 extends Phaser.Scene
         //this.entry.body.setAllowGravity(false);
         //this.entry.body.setImmovable(true);
         
-        this.hero = new Hero(this,100,280);  
+        //this.hero = new Hero(this,100,280);  
         
         //Leer e instanciar todas las entidades del nivel
         this.entities=this.map.getObjectLayer('level1_entities');
@@ -111,11 +111,6 @@ export class Level1 extends Phaser.Scene
         this.entities.objects.forEach(entity => {
             //console.log(entity.name + ' - ' + entity.x + ',' + entity.y);
             switch(entity.type){
-              /*  case 'Hero':
-                    let _hero = new Hero(this,entity.x,entity.y, entity.type.toLowerCase());
-                    _hero.setScore(entity.properties[0].value);
-                    break;*/
-
                 case 'Jumper':
                     let _jumper = new Jumper(this,entity.x,entity.y, entity.type.toLowerCase());
                     _jumper.setHealth(entity.properties[0].value);
@@ -130,12 +125,12 @@ export class Level1 extends Phaser.Scene
                     _gem.setValue(entity.properties[0].value)
                     break;
 
-                case 'Door': let _door = new Door(this, entity.x, entity.y,  entity.type.toLowerCase());
-                    if(!entity.properties[0].value){
-                        this.hero = new Hero(this, entity.x, entity.y, entity.type.toLowerCase());
-
+                case 'Door':  let _door = new Door(this, entity.x,entity.y,entity.type.toLowerCase());
+                    if(!entity.properties[0].value)
+                    {
+                        this.hero = new Hero(this, entity.x,entity.y,'hero');                            
                     }
-                    _door.setOpened(entity.properties[0].value);
+                _door.setState(entity.properties[0].value);
                     break;
                 default: console.log('Entidad no reconocida: '+entity.type);
 

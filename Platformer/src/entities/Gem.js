@@ -17,12 +17,16 @@ export class Gem extends Phaser.Physics.Arcade.Sprite{
     }
 
     onHeroReady(_hero){
-        this.scene.physics.add.overlap(
-            this, 
-            this.scene.hero,
-            this.scene.hero.pickGem,
-        )
+        this.scene.physics.add.overlap
+        (
+            _hero,
+            this,
+            this.getGem,
+            null,
+            this                
+        );     
     }
+
     setValue(_value){
         this.value = _value
         this.applyColorByValue();
@@ -38,6 +42,13 @@ export class Gem extends Phaser.Physics.Arcade.Sprite{
         }
     }*/
 
+    getGem(){
+        //Actualizar UI de puntos
+        this.scene.game.events.emit(EVENTS.GEM_COLLECTED, this.value ?? 1);
+        //Destruir gem
+        this.disableBody(true, true);
+        this.destroy();    
+    }
     applyColorByValue(){
         if (this.value === 5){
             this.setTint(0x00ff00); // COLOR VERDE

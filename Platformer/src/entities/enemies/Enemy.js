@@ -1,5 +1,5 @@
 import { ENEMY } from '../../core/constants.js';
-
+import { EVENTS } from '../../core/events.js';
 export class Enemy extends Phaser.Physics.Arcade.Sprite {
      constructor(_scene, _posX, _posY, _spriteTag) {
         super(_scene, _posX, _posY, _spriteTag);
@@ -11,9 +11,21 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
 
         this.body.setVelocityX(ENEMY.SPEED * this.direction);
         this.health = 1;
+        //Definimos colisiones con el entorno 
         this.setColliders();
-    }
 
+        //escuchamos el evento de creacion del heroe
+        this.scene.game.events.on(EVENTS.HERO_READY, this.onHeroReady, this);
+    }
+    onHeroReady(_hero){
+        this.scene.physics.add.collider(
+            this,
+            _hero,
+            this.scene.hero.hitHero,
+            null,
+            _hero
+        )
+    }
     setColliders() {
         if(this.scene.walls){
             this.scene.physics.add.collider(
@@ -21,7 +33,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
                 this.scene.walls
             )
         }
-        if(this.scene.hero){
+      /*if(this.scene.hero){
             this.scene.physics.add.collider(
                 this,
                 this.scene.hero,
@@ -29,7 +41,7 @@ export class Enemy extends Phaser.Physics.Arcade.Sprite {
                 null,
                 this.scene.hero
             )
-        }
+        }*/
     }
     
     setHealth(_value){
