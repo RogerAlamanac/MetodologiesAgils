@@ -5,19 +5,6 @@ export class HUD extends Phaser.Scene {
     constructor() {
       super({ key: 'hud' });
     }
-  
-    preload()
-    { //Carga assets en memoria
-        this.load.setPath('assets/sprites/ui');
-        this.load.image('gemUI','spr_gui_gem_0.png');
-
-        this.load.setPath('assets/sprites/spritesheets');
-        this.load.spritesheet('healthUI','health.png',
-        {frameWidth:128,frameHeight:28});
-
-        this.load.setPath('assets/fonts/');
-        this.load.bitmapFont('UIFont','font.png','font.fnt');
-    }
 
     create()
     {

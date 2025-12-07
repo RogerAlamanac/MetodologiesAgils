@@ -10,12 +10,16 @@ export class Door extends Phaser.Physics.Arcade.Sprite{
         
     }
 
-    setOpened(_isOpen){
+    setState(_isOpen){
         this.isOpen = _isOpen;
         if(_isOpen){
             //Anim puerta
             this.anims.play(this.texture.key+"_idle")
         }
+    }
+
+    setOpened(_isOpen){
+        this.setState(_isOpen);
     }
 
     setColliders(_hero){

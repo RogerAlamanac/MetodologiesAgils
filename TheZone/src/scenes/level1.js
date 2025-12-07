@@ -60,7 +60,7 @@ export class Level1 extends Phaser.Scene
         this.interactive_zones = this.add.group();
         this.chestZone = this.add.zone(133,42,24,24).setName('chest');
         this.interactive_zones.add(this.chestZone);
-        this.chestZone.body.debugBodyColor = 0xFFFFFF;
+        //this.chestZone.body.debugBodyColor = 0xFFFFFF;
 
 
         this.hero = new Hero(this,88,120, 'hero');  

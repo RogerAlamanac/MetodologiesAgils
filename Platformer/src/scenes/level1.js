@@ -12,34 +12,6 @@ export class Level1 extends Phaser.Scene
         super({key:'level1'});
     }
 
-    preload()
-    { //Carga assets en memoria
-        this.cameras.main.setBackgroundColor('#666');
-        this.load.setPath('assets/sprites/backgrounds');
-        this.load.image('bg','bg_green_tile.png');
-
-        this.load.setPath('assets/sprites/spritesheets');
-        this.load.spritesheet('hero','hero.png',
-        {frameWidth:32,frameHeight:32});
-        this.load.spritesheet('jumper','jumper.png',
-        {frameWidth:32,frameHeight:32});
-        this.load.spritesheet('slime','slime.png',
-        {frameWidth:32,frameHeight:32});
-        this.load.spritesheet('gem', 'gem.png',
-        {frameWidth:32,frameHeight:32});
-
-        this.load.spritesheet('door','door.png',
-        {frameWidth:32,frameHeight:40});
-
-        this.load.setPath('assets/tiled/tilesets');   
-        this.load.image('tileset_walls','tileset_walls.png');
-        this.load.image('tileset_moss','tileset_moss.png');
-
-        this.load.setPath('assets/tiled/maps');
-        this.load.tilemapTiledJSON('level1','level1.json');
-        //this.load.tilemapTiledJSON('level'+nivelActual,'level'+nivelActual+'.json');
-    }
-
     create()
     { //Pinta assets en pantalla
         //Pintamos el fondo
@@ -137,7 +109,7 @@ export class Level1 extends Phaser.Scene
             }
         }, this);
 
-        this.game.events.emit(EVENTS.HERO_READY, this);
+        this.game.events.emit(EVENTS.HERO_READY, this.hero);
         //this.jumper = new Jumper(this,240,304);
         //this.slime = new Slime(this,656,272);
 
