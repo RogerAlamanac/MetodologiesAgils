@@ -32,20 +32,18 @@ export class Hero extends Phaser.Physics.Arcade.Sprite{
             this.body.setVelocityY(HERO.JUMP_FORCE);
 
         } else{
-            if(this.health<0){
-                this.scene.game.events.emit(EVENTS.HERO_DIED);
-                this.body.reset(65, 100);
-                this.health = HERO.MAX_LIVES;
-                this.score = 0;
-            } 
-            else{
+            // Restar una vida
+            this.health--;
+            
+            if(this.health <= 0) {
+                // Game Over - se acabaron las vidas
+                this.scene.game.events.emit(EVENTS.GAME_OVER);
+            } else {
+                // Aún hay vidas - emitir evento de daño y resucitar
                 this.scene.game.events.emit(EVENTS.HERO_DAMAGED);
                 this.body.reset(65, 100);
-                this.scene.cameras.main.shake(500, 0.05)
+                this.scene.cameras.main.shake(500, 0.05);
                 this.scene.cameras.main.flash(500, 255, 0, 0);
-                
-
-
                 this.score += 10;
             }
         }

@@ -70,9 +70,14 @@ export class Preload extends Phaser.Scene {
         this.load.image('tileset_walls', 'tileset_walls.png');
         this.load.image('tileset_moss', 'tileset_moss.png');
 
-        // Tilemaps
+        // Tilemaps - Cargar todos los niveles disponibles
         this.load.setPath('assets/tiled/maps');
         this.load.tilemapTiledJSON('level1', 'level1.json');
+        
+        // Agregar más niveles según sea necesario:
+        // this.load.tilemapTiledJSON('level2', 'level2.json');
+        // this.load.tilemapTiledJSON('level3', 'level3.json');
+        // etc...
 
         // Fonts
         this.load.setPath('assets/fonts/');

@@ -36,5 +36,11 @@ export const EVENTS =
     * Se emite cuando el héroe muere.
     * payload: (hero: Hero)
     */
-    HERO_DIED: 'hero:died' 
+    HERO_DIED: 'hero:died',
+
+    /**
+    * Se emite cuando se agotan las vidas del jugador (Game Over).
+    * payload: (none)
+    */
+    GAME_OVER: 'game:over'
 };
